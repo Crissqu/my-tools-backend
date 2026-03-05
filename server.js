@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // 默认cookie（用户需要提供自己的）
-const DEFAULT_COOKIE = process.env.ZHIHU_COOKIE || '';
+const DEFAULT_COOKIE = process.env.ZHIHU_COOKIE || 'z_c0=2|1:0|10:1772070981|4:z_c0|92:Mi4xM0NNWEFBQUFBQUNLOU5PbUNKLWRHaVlBQUFCZ0FsVk5OZVdNYWdBODZKdnJscDFQTmtKU3FwaTNRMkVkU2ZMTF9B|6ff339dd03b1bb1f551514c3a896cd921a3dcabaab09fe4b81f7ed7f2dc79032';
 
 // 通用请求头
 const getHeaders = (cookie) => ({
