@@ -25,11 +25,17 @@ const getHeaders = (cookie) => ({
 // API 1: 获取用户收藏夹列表
 app.get('/api/collections', async (req, res) => {
   try {
-    const cookie = req.headers.cookie || '';
+    // 透明转发所有 headers
+    const forwardHeaders = {
+      ...req.headers,
+      'host': 'www.zhihu.com',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    };
+    delete forwardHeaders['host']; // 让 axios 自动处理
     
     const response = await axios.get(
       'https://www.zhihu.com/api/v3/collections/mine',
-      { headers: getHeaders(cookie) }
+      { headers: forwardHeaders }
     );
     
     const folders = response.data.data?.map(item => ({
@@ -58,11 +64,12 @@ app.get('/api/collections', async (req, res) => {
 app.get('/api/collections/:id/articles', async (req, res) => {
   try {
     const { id } = req.params;
-    const cookie = req.headers.cookie || '';
+    const forwardHeaders = { ...req.headers, 'host': 'www.zhihu.com' };
+    delete forwardHeaders['host'];
     
     const response = await axios.get(
       `https://www.zhihu.com/api/v3/collections/${id}/contents`,
-      { headers: getHeaders(cookie) }
+      { headers: forwardHeaders }
     );
     
     const articles = response.data.data?.map(item => ({
@@ -95,12 +102,13 @@ app.get('/api/collections/:id/articles', async (req, res) => {
 app.get('/api/author/:authorId/articles', async (req, res) => {
   try {
     const { authorId } = req.params;
-    const cookie = req.headers.cookie || '';
+    const forwardHeaders = { ...req.headers, 'host': 'www.zhihu.com' };
+    delete forwardHeaders['host'];
     
     const response = await axios.get(
       `https://www.zhihu.com/api/v4/members/${authorId}/articles`,
       { 
-        headers: getHeaders(cookie),
+        headers: forwardHeaders,
         params: { limit: 20, offset: 0 }
       }
     );
